@@ -1,0 +1,34 @@
+version: '2'
+services:
+  esb:
+    image: serrodcal/echo-wso2esb-5.0.0
+    build: ./echoApp
+    ports:
+      - "9443:9443"
+      - "8280:8280"
+      - "8243:8243"
+    command: 
+      - "./tests/console.sh"
+      - "./tests/echo-esb.sh"
+  mock:
+    image: serrodcal/echo-wiremock
+    build: ./wiremock
+    ports:
+      - "8080:8080"
+    command: 
+      - "./tests/echo-wiremock.sh"
+  logstash:
+    image: serrodcal/echo-logstash
+    build: ./logstash
+    ports:
+      - "80:80"
+  elasticsearch:
+    image: serrodcal/echo-elasticsearch
+    build: ./elasticsearch
+    ports:
+      - "80:80"
+  kibana:
+    image: echo-kibana
+    build: ./kibana
+    ports:
+      - "80:80"

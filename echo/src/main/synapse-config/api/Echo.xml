@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/echo" name="Echo" xmlns="http://ws.apache.org/ns/synapse">
+  <resource methods="POST" protocol="http" uri-template="/echo">
+    <inSequence>
+      <header action="remove" name="To" scope="default"/>
+      <property name="RESPONSE" scope="default" type="STRING" value="true"/>
+      <property action="remove" name="NO_ENTITY_BODY" scope="axis2"/>
+      <send/>
+    </inSequence>
+    <outSequence>
+      <send/>
+    </outSequence>
+    <faultSequence/>
+  </resource>
+  <resource methods="POST" protocol="http" uri-template="/wiremock">
+    <inSequence>
+      <send>
+        <endpoint>
+          <http method="post" trace="disable" uri-template="http://mock:8080/echo"/>
+        </endpoint>
+      </send>
+    </inSequence>
+    <outSequence>
+      <send/>
+    </outSequence>
+    <faultSequence/>
+  </resource>
+</api>

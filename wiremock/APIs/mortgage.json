@@ -1,0 +1,13 @@
+{
+    "request": {
+        "method": "POST",
+        "url": "/mortgage/v1/hire"
+    },
+    "response": {
+        "status": 200,
+        "body": "Hired!",
+        "headers": {
+            "Content-Type": "text/plain"
+        }
+    }
+}
