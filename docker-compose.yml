@@ -21,14 +21,14 @@ services:
     image: serrodcal/echo-logstash
     build: ./logstash
     ports:
-      - "80:80"
+      - "5043:5043"
   elasticsearch:
     image: serrodcal/echo-elasticsearch
     build: ./elasticsearch
     ports:
-      - "80:80"
+      - "9200:9200"
   kibana:
     image: echo-kibana
     build: ./kibana
     ports:
-      - "80:80"
+      - "9201:9201"
