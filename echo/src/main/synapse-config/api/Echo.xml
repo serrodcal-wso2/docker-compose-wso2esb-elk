@@ -16,7 +16,7 @@
     <inSequence>
       <send>
         <endpoint>
-          <http method="post" trace="disable" uri-template="http://mock:8080/echo"/>
+          <http method="post" trace="disable" uri-template="http://wiremock:8080/echo"/>
         </endpoint>
       </send>
     </inSequence>

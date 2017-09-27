@@ -4,7 +4,7 @@ services:
     image: serrodcal/echo-wiremock
     build: ./wiremock
     volumes:
-      - ./echoApp/target/echoApp.car:/opt/wso2esb-5.0.0/repository/deployment/server/carbonapps/echoApp.car
+      - ./echoApp/target/echoApp_1.0.0.car:/opt/wso2esb-5.0.0/repository/deployment/server/carbonapps/echoApp_1.0.0.car
     ports:
       - "8080:8080"
     networks:
