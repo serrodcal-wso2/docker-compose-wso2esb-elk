@@ -23,20 +23,18 @@ services:
   elasticsearch:
     image: serrodcal/echo-elasticsearch
     build: ./elasticsearch
-    elasticsearch:
-      build: elasticsearch/
-      volumes:
-        - ./wiremock/mappings/echo.json:/home/wiremock/mappings/echo.json
-      ports:
-        - "9200:9200"
-        - "9300:9300"
-      environment:
-        ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-      networks:
-        - elk
-      depends_on:
-        - wiremock
-        - esb
+    volumes:
+      - ./wiremock/mappings/echo.json:/home/wiremock/mappings/echo.json
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - elk
+    depends_on:
+      - wiremock
+      - esb
   logstash:
     image: serrodcal/echo-logstash
     build: ./logstash
