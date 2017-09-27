@@ -1,8 +1,10 @@
 version: '2'
 services:
-  mock:
+  wiremock:
     image: serrodcal/echo-wiremock
     build: ./wiremock
+    volumes:
+      - ./echoApp/target/echoApp.car:/opt/wso2esb-5.0.0/repository/deployment/server/carbonapps/echoApp.car
     ports:
       - "8080:8080"
     networks:
@@ -17,7 +19,7 @@ services:
     networks:
       - elk
     depends_on:
-      - mock
+      - wiremock
   elasticsearch:
     image: serrodcal/echo-elasticsearch
     build: ./elasticsearch
@@ -33,7 +35,7 @@ services:
       networks:
         - elk
       depends_on:
-        - mock
+        - wiremock
         - esb
   logstash:
     image: serrodcal/echo-logstash
@@ -48,7 +50,7 @@ services:
     networks:
       - elk
     depends_on:
-      - mock
+      - wiremock
       - esb
       - elasticsearch
   kibana:
@@ -61,7 +63,7 @@ services:
     networks:
       - elk
     depends_on:
-      - mock
+      - wiremock
       - esb
       - elasticsearch
 networks:
