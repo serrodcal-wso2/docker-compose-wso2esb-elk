@@ -1,5 +1,12 @@
 version: '2'
 services:
+  mock:
+    image: serrodcal/echo-wiremock
+    build: ./wiremock
+    ports:
+      - "8080:8080"
+    networks:
+      - elk
   esb:
     image: serrodcal/echo-wso2esb-5.0.0
     build: ./echoApp
@@ -7,28 +14,56 @@ services:
       - "9443:9443"
       - "8280:8280"
       - "8243:8243"
-    command: 
-      - "./tests/console.sh"
-      - "./tests/echo-esb.sh"
-  mock:
-    image: serrodcal/echo-wiremock
-    build: ./wiremock
-    ports:
-      - "8080:8080"
-    command: 
-      - "./tests/echo-wiremock.sh"
-  logstash:
-    image: serrodcal/echo-logstash
-    build: ./logstash
-    ports:
-      - "5043:5043"
+    networks:
+      - elk
+    depends_on:
+      - mock
   elasticsearch:
     image: serrodcal/echo-elasticsearch
     build: ./elasticsearch
+    elasticsearch:
+      build: elasticsearch/
+      volumes:
+        - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      ports:
+        - "9200:9200"
+        - "9300:9300"
+      environment:
+        ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      networks:
+        - elk
+      depends_on:
+        - mock
+        - esb
+  logstash:
+    image: serrodcal/echo-logstash
+    build: ./logstash
+    volumes:
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
     ports:
-      - "9200:9200"
+      - "5000:5000"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - elk
+    depends_on:
+      - mock
+      - esb
+      - elasticsearch
   kibana:
     image: echo-kibana
     build: ./kibana
+    volumes:
+      - ./kibana/config/:/usr/share/kibana/config
     ports:
-      - "9201:9201"
+      - "5601:5601"
+    networks:
+      - elk
+    depends_on:
+      - mock
+      - esb
+      - elasticsearch
+networks:
+  elk:
+    driver: bridge
