@@ -4,34 +4,31 @@ services:
     image: serrodcal/echo-wiremock
     build: ./wiremock
     volumes:
-      - ./echoApp/target/echoApp_1.0.0.car:/opt/wso2esb-5.0.0/repository/deployment/server/carbonapps/echoApp_1.0.0.car
+      - ./wiremock/mappings/echo.json:/home/wiremock/mappings/echo.json
+      - ./wiremock/config/filebeat.yml:/etc/filebeat/filebeat.yml
     ports:
       - "8080:8080"
-    networks:
-      - elk
   esb:
     image: serrodcal/echo-wso2esb-5.0.0
     build: ./echoApp
+    volumes:
+      - ./echoApp/target/echoApp_1.0.0.car:/opt/wso2esb-5.0.0/repository/deployment/server/carbonapps/echoApp_1.0.0.car
     ports:
       - "9443:9443"
       - "8280:8280"
       - "8243:8243"
-    networks:
-      - elk
     depends_on:
       - wiremock
   elasticsearch:
     image: serrodcal/echo-elasticsearch
     build: ./elasticsearch
     volumes:
-      - ./wiremock/mappings/echo.json:/home/wiremock/mappings/echo.json
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     ports:
       - "9200:9200"
       - "9300:9300"
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-    networks:
-      - elk
     depends_on:
       - wiremock
       - esb
@@ -45,8 +42,6 @@ services:
       - "5000:5000"
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-    networks:
-      - elk
     depends_on:
       - wiremock
       - esb
@@ -58,12 +53,7 @@ services:
       - ./kibana/config/:/usr/share/kibana/config
     ports:
       - "5601:5601"
-    networks:
-      - elk
     depends_on:
       - wiremock
       - esb
       - elasticsearch
-networks:
-  elk:
-    driver: bridge

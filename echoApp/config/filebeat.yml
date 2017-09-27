@@ -1,0 +1,67 @@
+ ########################## Filebeat Configuration #############################
+ 
+#=========================== Filebeat prospectors =============================
+filebeat.prospectors:
+- input_type: log
+  paths: # Aquí se indica dónde están y cuales son los ficheros de logs que se desean tener en cuenta.
+  - /log_apps/logs_diario/wso2/wso2IndividualTimeServices.wso2.esbint.log
+  - /log_apps/logs_diario/wso2/wso2AverageTimeServices.wso2.esbint.log
+  - /log_apps/logs_diario/wso2/wso2carbon.wso2.esbint.log
+  - /log_apps/logs_diario/wso2/wso2errors.wso2.esbint.log
+  tags: [esbint wso2] # Este tag se utiliza para diferenciar los internos de los externos.
+  fields_under_root: true
+  fields:
+    app: esbint-wso2 # Se indica el nombre de la aplicación.
+    system: las # Se indica el indice al que se manda a indexar.
+  multiline.pattern: '^[[:space:]]+|^Caused by:' #
+  multiline.negate: false
+  multiline.match: after
+ 
+# sensitive logs
+- input_type: log
+  paths:
+  - /log_apps/logs_diario/sensitive/*.log
+ tags: [esbint, sensitive]
+  fields_under_root: true
+  fields:
+    app: esbint-sensitive
+    system: las
+  multiline.pattern: '^[[:space:]]+|^Caused by:'
+  multiline.negate: false
+  multiline.match: after
+ 
+# obfuscated logs
+- input_type: log
+  paths:
+  - /log_apps/logs_diario/obfuscated/*.log
+  tags: [esbint, obfuscated]
+  fields_under_root: true
+  fields:
+    app: esbint-obfuscated
+    system: las
+  multiline.pattern: '^[[:space:]]+|^Caused by:'
+  multiline.negate: false
+  multiline.match: after
+ 
+#========================= Filebeat global options ============================
+  registry_file: /var/lib/filebeat/registry # Dónde está la configuración de filebeat.
+ 
+#================================ Outputs =====================================
+ 
+#----------------------------- Logstash output --------------------------------
+output.logstash: # Salida, es decir, dónde se envían dichos ficheros.
+  hosts:
+  - f2e.arkanoid0.omg.biab.ingdirect.intranet:5043 # En el puerto 5043 de la máquina que se indica, estará escuchando Logstash.
+  loadbalance: false
+ 
+#================================ Logging =====================================
+ 
+# Sets log level. The default log level is info.
+# Available log levels are: critical, error, warning, info, debug
+logging.level: info
+logging.to_files: true
+logging.files:
+  path: /var/log/filebeat
+  name: filebeat.log
+  rotateeverybytes: 10485760 # = 10MB
+  keepfiles: 10
