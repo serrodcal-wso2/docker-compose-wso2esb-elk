@@ -21,11 +21,6 @@ RUN mkdir -p /var/wiremock/lib/ \
 
 WORKDIR /home/wiremock
 
-COPY docker-entrypoint.sh /
-COPY APIs/* /home/wiremock/mappings/
-
-VOLUME /home/wiremock
 EXPOSE 8080 8081
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["java", "-cp", "/var/wiremock/lib/*:/var/wiremock/extensions/*", "com.github.tomakehurst.wiremock.standalone.WireMockServerRunner"]
