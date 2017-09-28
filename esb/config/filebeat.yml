@@ -14,32 +14,6 @@ filebeat.prospectors:
   multiline.negate: false
   multiline.match: after
  
-# sensitive logs
-- input_type: log
-  paths:
-  - /opt/wso2esb-5.0.0/repository/logs/sensitive/*.log
- tags: [echo, sensitive]
-  fields_under_root: true
-  fields:
-    app: echo-sensitive
-    system: las
-  multiline.pattern: '^[[:space:]]+|^Caused by:'
-  multiline.negate: false
-  multiline.match: after
- 
-# obfuscated logs
-- input_type: log
-  paths:
-  - /opt/wso2esb-5.0.0/repository/logs/obfuscated/*.log
-  tags: [echo, obfuscated]
-  fields_under_root: true
-  fields:
-    app: echo-obfuscated
-    system: las
-  multiline.pattern: '^[[:space:]]+|^Caused by:'
-  multiline.negate: false
-  multiline.match: after
- 
 #========================= Filebeat global options ============================
   registry_file: /var/lib/filebeat/registry
  

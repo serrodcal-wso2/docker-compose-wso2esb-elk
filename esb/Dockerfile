@@ -9,7 +9,8 @@ RUN apt-get update && \
     rm filebeat-5.6.2-amd64.deb && \
     apt-get clean && \
     unzip /opt/wso2esb-5.0.0.zip -d /opt && \
-    rm /opt/wso2esb-5.0.0.zip
+    rm /opt/wso2esb-5.0.0.zip && \
+    service filebeat start
 
 EXPOSE 9443 8243 8280
 WORKDIR /opt/wso2esb-5.0.0
