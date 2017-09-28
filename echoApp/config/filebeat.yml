@@ -3,16 +3,13 @@
 #=========================== Filebeat prospectors =============================
 filebeat.prospectors:
 - input_type: log
-  paths: # Aquí se indica dónde están y cuales son los ficheros de logs que se desean tener en cuenta.
-  - /log_apps/logs_diario/wso2/wso2IndividualTimeServices.wso2.esbint.log
-  - /log_apps/logs_diario/wso2/wso2AverageTimeServices.wso2.esbint.log
-  - /log_apps/logs_diario/wso2/wso2carbon.wso2.esbint.log
-  - /log_apps/logs_diario/wso2/wso2errors.wso2.esbint.log
-  tags: [esbint wso2] # Este tag se utiliza para diferenciar los internos de los externos.
+  paths: 
+  - /opt/wso2esb-5.0.0/repository/logs/wso2carbon.log
+  tags: [echo wso2] 
   fields_under_root: true
   fields:
-    app: esbint-wso2 # Se indica el nombre de la aplicación.
-    system: las # Se indica el indice al que se manda a indexar.
+    app: echo-wso2
+    system: las 
   multiline.pattern: '^[[:space:]]+|^Caused by:' #
   multiline.negate: false
   multiline.match: after
@@ -20,11 +17,11 @@ filebeat.prospectors:
 # sensitive logs
 - input_type: log
   paths:
-  - /log_apps/logs_diario/sensitive/*.log
- tags: [esbint, sensitive]
+  - /opt/wso2esb-5.0.0/repository/logs/sensitive/*.log
+ tags: [echo, sensitive]
   fields_under_root: true
   fields:
-    app: esbint-sensitive
+    app: echo-sensitive
     system: las
   multiline.pattern: '^[[:space:]]+|^Caused by:'
   multiline.negate: false
@@ -33,25 +30,25 @@ filebeat.prospectors:
 # obfuscated logs
 - input_type: log
   paths:
-  - /log_apps/logs_diario/obfuscated/*.log
-  tags: [esbint, obfuscated]
+  - /opt/wso2esb-5.0.0/repository/logs/obfuscated/*.log
+  tags: [echo, obfuscated]
   fields_under_root: true
   fields:
-    app: esbint-obfuscated
+    app: echo-obfuscated
     system: las
   multiline.pattern: '^[[:space:]]+|^Caused by:'
   multiline.negate: false
   multiline.match: after
  
 #========================= Filebeat global options ============================
-  registry_file: /var/lib/filebeat/registry # Dónde está la configuración de filebeat.
+  registry_file: /var/lib/filebeat/registry
  
 #================================ Outputs =====================================
  
 #----------------------------- Logstash output --------------------------------
-output.logstash: # Salida, es decir, dónde se envían dichos ficheros.
+output.logstash: 
   hosts:
-  - f2e.arkanoid0.omg.biab.ingdirect.intranet:5043 # En el puerto 5043 de la máquina que se indica, estará escuchando Logstash.
+  - logstash:5000 
   loadbalance: false
  
 #================================ Logging =====================================

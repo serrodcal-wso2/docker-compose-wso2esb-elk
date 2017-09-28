@@ -14,6 +14,15 @@
   </resource>
   <resource methods="POST" protocol="http" uri-template="/wiremock">
     <inSequence>
+      <log category="INFO">
+        <property name="**** INSIDE" value="[API] /echo/wiremock"></property>
+      </log>
+      <log category="INFO">
+        <property name="**** INSIDE-PAYLOAD" expression="json-eval($.)"></property>
+      </log>
+      <log category="INFO">
+        <property name="**** IN-ENDPOINT" value="http://wiremock:8080/echo"></property>
+      </log>
       <send>
         <endpoint>
           <http method="post" trace="disable" uri-template="http://wiremock:8080/echo"/>
@@ -21,6 +30,15 @@
       </send>
     </inSequence>
     <outSequence>
+      <log category="INFO">
+        <property name="**** OUT-ENDPOINT" value="http://wiremock:8080/echo"></property>
+      </log>
+      <log category="INFO">
+        <property name="**** OUTSIDE-PAYLOAD" expression="json-eval($.)"></property>
+      </log>
+      <log category="INFO">
+        <property name="**** OUTSIDE" value="[API] /echo/wiremock"></property>
+      </log>
       <send/>
     </outSequence>
     <faultSequence/>

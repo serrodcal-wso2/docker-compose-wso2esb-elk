@@ -47,7 +47,7 @@ services:
       - esb
       - elasticsearch
   kibana:
-    image: echo-kibana
+    image: serrodcal/echo-kibana
     build: ./kibana
     volumes:
       - ./kibana/config/:/usr/share/kibana/config
