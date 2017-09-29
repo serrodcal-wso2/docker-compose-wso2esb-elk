@@ -19,7 +19,7 @@ $ docker-compose up
 Give servers about 3 minutes to initialize (depending on the hardware), then access:
 
 * The WSO2 ESB web UI by hitting `https://localhost:9443`.
-* The Kibana web UI by hitting `https://localhost:5601`.
+* The Kibana web UI by hitting `http://localhost:5601`.
 
 By default, the stack exposes the following ports:
 
