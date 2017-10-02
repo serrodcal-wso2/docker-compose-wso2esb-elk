@@ -35,3 +35,5 @@ By default, the stack exposes the following ports:
 **Note**: Due to a limitation it is necessary to access the container of the ESB to execute `service filebeat start`.
 
 **Note**: Refer to [Connect Kibana with Elasticsearch](https://www.elastic.co/guide/en/kibana/current/connect-to-elasticsearch.html) for detailed instructions about the index pattern configuration.
+
+**Note**: By default, index using by elastics is `las-*`. You can change it in `logstash.conf` file.
