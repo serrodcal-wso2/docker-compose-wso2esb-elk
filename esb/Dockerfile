@@ -13,5 +13,4 @@ RUN apt-get update && \
 
 EXPOSE 9443 8243 8280
 WORKDIR /opt/wso2esb-5.0.0
-CMD ["service filebeat start"]
 CMD ["bin/wso2server.sh"]
