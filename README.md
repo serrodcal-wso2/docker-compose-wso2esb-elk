@@ -33,11 +33,3 @@ By default, the stack exposes the following ports:
 * 5601: Kibana.
 
 **Note**: Due to a limitation it is necessary to access the container of the ESB to execute `service filebeat start`.
-
-## Initial setup
-
-_Under construction_.
-
-## JVM Tunning
-
-_Under construction_.
